@@ -7,9 +7,10 @@
 
 package computergraphics.applications.blatt2;
 
-import computergraphics.applications.blatt1.ColorNode;
+import computergraphics.scenegraph.ColorNode;
 import computergraphics.datastructures.ObjIO;
 import computergraphics.framework.AbstractCGFrame;
+import computergraphics.math.Vector3;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 
@@ -38,11 +39,11 @@ public class CGFrame_A2 extends AbstractCGFrame {
     HalfEdgeTriangleMesh mesh = new HalfEdgeTriangleMesh();
     
     
-    objImport.einlesen("D:\\htdocs\\subworkspace\\Computergrafik\\meshes\\cow.obj", mesh);
+    objImport.einlesen("meshes/cow.obj", mesh);
     mesh.computeTriangleNormals();
     mesh.setOppositeHalfEdges();
     
-    ColorNode cNode = new ColorNode(0.5, 0.5, 0);
+    ColorNode cNode = new ColorNode(new Vector3(5, 0.5, 0));
     cNode.addChild(new HalfEdgeTriangleMeshNode(mesh));
     root.addChild(cNode);
   }
