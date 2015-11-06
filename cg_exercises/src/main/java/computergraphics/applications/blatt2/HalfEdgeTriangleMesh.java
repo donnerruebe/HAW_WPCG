@@ -89,36 +89,39 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh
 		facets.add(facet);
 	}
 	
+	/**
+	 * Diese Methode berechnet zu jeder Halbkante die gegenüberliegende, indem das komplette Netz einmal durchlaufen wird
+	 */
 	public void setOppositeHalfEdges()
 	{
+		// Schleife für jede Halbkante
 		for (HalfEdge h1: getHalfEdges())
 		{
+			// Prüfen, ob die gegenüberliegende Halbkante bereits gesetzt ist (dann muss nichts unternommen werden)
 			if (h1.getOpposite() == null)
 			{
+				// Durchlaufe alle Halbkanten
 				for (HalfEdge h2 : getHalfEdges())
 				{
-					if (h1.getNext().getStartVertex().equals(h2.getStartVertex()))
+					// Prüfe, ob diese Halbkante den gleichen Startknoten, wie der Endknoten der eigentlichen Halbkante hat
+					if (!h1.equals(h2))
 					{
-						h1.setOpposite(h2);
-						h2.setOpposite(h1);
-						break;
+						if (
+								// Beide Kanten verlaufen entgegengesetzt (unterschiedliche Start- und Zielknoten
+								(h1.getNext().getStartVertex().equals(h2.getStartVertex()) && h2.getNext().getStartVertex().equals(h1.getStartVertex())) ||
+								// Beide Kanten verlaufen in eine Richtung (also gleicher Start- und Endknoten)
+								(h1.getStartVertex().equals(h2.getStartVertex()) && h1.getNext().getStartVertex().equals(h2.getNext().getStartVertex()))
+							)
+						{
+							h1.setOpposite(h2);
+							h2.setOpposite(h1);
+							break;
+						}
 					}
+					
 				}
 			}
 		}
-		for (HalfEdge h1: getHalfEdges())
-		{
-			if (h1.getOpposite() == null)
-			{
-				System.out.println("Keine Opposite gefunden!");
-			}
-		}
-//		HalfEdge he = new HalfEdge();
-//		he.setFacet(halfEdge.getFacet());
-//		//he.setNext(next);
-//		he.setOpposite(halfEdge);
-//		he.setStartVertex(halfEdge.getNext().getStartVertex());
-//		halfEdge.setOpposite(he);
 	}
 
 	@Override

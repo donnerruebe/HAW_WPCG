@@ -18,6 +18,9 @@ public class HalfEdgeTriangleMeshNode extends Node
 		this.mesh = mesh;
 	}
 	
+	/**
+	 * Initialisiert eine Displayliste
+	 */
 	private void initDisplayList(GL2 gl)
 	{
 		System.out.println("Creating Display List");
