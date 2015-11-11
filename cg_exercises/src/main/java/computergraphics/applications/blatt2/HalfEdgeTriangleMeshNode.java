@@ -35,19 +35,20 @@ public class HalfEdgeTriangleMeshNode extends Node
 			
 			HalfEdge he = f.getHalfEdge();
 			Vertex v = he.getStartVertex();
-			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			gl.glNormal3d(f.getNormal().get(0), f.getNormal().get(1), f.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 			
 			
 			he = he.getNext();
 			v = he.getStartVertex();
-			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 			
 
 			he = he.getNext();
 			v = he.getStartVertex();
-			gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
+			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
 			
 		}

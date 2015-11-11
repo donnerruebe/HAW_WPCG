@@ -171,46 +171,36 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh
 	{
 		for (TriangleFacet f:facets)
 		{
-			Vertex v1 = f.getHalfEdge().getStartVertex();
-			Vertex v2 = v1.getHalfEdge().getNext().getStartVertex();
-			Vertex v3 = v2.getHalfEdge().getNext().getStartVertex();
+			Vector3 v11 = f.getHalfEdge().getStartVertex().getPosition();
+			Vector3 v22 = f.getHalfEdge().getNext().getStartVertex().getPosition();
+			Vector3 v33 = f.getHalfEdge().getNext().getNext().getStartVertex().getPosition();
+
+			// Kreuzprodukte berechnen
+			Vector3 sv11 = v11.cross(v22);
+			Vector3 sv22 = v22.cross(v33);
+			Vector3 sv33 = v33.cross(v11);
 			
-			Vector3 v11 = v1.getPosition();
-			Vector3 v22 = v2.getPosition();
-			Vector3 v33 = v3.getPosition();
+			// Vectoren aufsummieren und normieren. Normale zuweisen
+			f.setNormal(sv11.add(sv22).add(sv33).getNormalized());
+		}
+		
+	}
+	
+	public void computeVertexNormals()
+	{
+		for (TriangleFacet f:facets)
+		{
+			Vector3 v11 = f.getHalfEdge().getStartVertex().getPosition();
+			Vector3 v22 = f.getHalfEdge().getNext().getStartVertex().getPosition();
+			Vector3 v33 = f.getHalfEdge().getNext().getNext().getStartVertex().getPosition();
+
+			// Kreuzprodukte berechnen
+			Vector3 sv11 = v11.cross(v22);
+			Vector3 sv22 = v22.cross(v33);
+			Vector3 sv33 = v33.cross(v11);
 			
-			Vector3 vec2 = v22.subtract(v11);
-			Vector3 vec3 = v33.subtract(v11);
-			
-			// Facette Normale zuweisen
-			f.setNormal(vec2.cross(vec3));		
-//			Vertex v1 = f.getHalfEdge().getStartVertex();
-//			Vertex v2 = v1.getHalfEdge().getNext().getStartVertex();
-//			Vertex v3 = v2.getHalfEdge().getNext().getStartVertex();
-//			
-//			Vector3 v12 = v1.getPosition().cross(v2.getPosition());
-//			Vector3 v23 = v2.getPosition().cross(v3.getPosition());
-//			Vector3 v31 = v3.getPosition().cross(v1.getPosition());
-//			
-//			
-//			double a1 = v12.cross(v23).getNorm() / 2;
-//			double a2 = v23.cross(v31).getNorm() / 2;
-//			double a3 = v31.cross(v12).getNorm() / 2;
-//			double sum = a1 + a2 + a3;
-//			
-//			double alpha = a1 / sum;
-//			double beta = a2 / sum;
-//			double gamma = a3 / sum;
-//			
-//			//double sumF = alpha + beta + gamma; // Muss 1.0 ergeben
-//			
-//			// Erzeuge Normale
-//			Vector3 normal = new Vector3(alpha, beta, gamma);
-//			// Normiere Normale
-//			normal = normal.multiply(1 / normal.getNorm());
-//			
-//			// Facette Normale zuweisen
-//			f.setNormal(normal);
+			// Vectoren aufsummieren und normieren. Normale zuweisen
+			f.setNormal(sv11.add(sv22).add(sv33).getNormalized());
 		}
 		
 	}
