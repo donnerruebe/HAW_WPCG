@@ -43,7 +43,7 @@ public class CGFrame_A2 extends AbstractCGFrame {
     mesh.computeTriangleNormals();
     mesh.setOppositeHalfEdges();
     
-    ColorNode cNode = new ColorNode(new Vector3(5, 0.5, 0));
+    ColorNode cNode = new ColorNode(new Vector3(0.5, 0, 1));
     cNode.addChild(new HalfEdgeTriangleMeshNode(mesh));
     root.addChild(cNode);
   }

@@ -188,19 +188,19 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh
 	
 	public void computeVertexNormals()
 	{
-		for (TriangleFacet f:facets)
+		for (Vertex v:vertices)
 		{
-			Vector3 v11 = f.getHalfEdge().getStartVertex().getPosition();
-			Vector3 v22 = f.getHalfEdge().getNext().getStartVertex().getPosition();
-			Vector3 v33 = f.getHalfEdge().getNext().getNext().getStartVertex().getPosition();
-
-			// Kreuzprodukte berechnen
-			Vector3 sv11 = v11.cross(v22);
-			Vector3 sv22 = v22.cross(v33);
-			Vector3 sv33 = v33.cross(v11);
+			HalfEdge firstEdge = v.getHalfEdge();
+			Vector3 normal= firstEdge.getFacet().getNormal();
 			
-			// Vectoren aufsummieren und normieren. Normale zuweisen
-			f.setNormal(sv11.add(sv22).add(sv33).getNormalized());
+			HalfEdge currentEdge = firstEdge.getOpposite().getNext();
+			
+			while(currentEdge.getOpposite().getNext() != firstEdge){
+				
+				normal.add(currentEdge.getFacet().getNormal());
+				currentEdge = currentEdge.getOpposite().getNext();
+			}
+			v.setNormal(normal.getNormalized());
 		}
 		
 	}
