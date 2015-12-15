@@ -49,11 +49,10 @@ public class CGFrame_A5 extends AbstractCGFrame
 			curve.addControlpoint(new Vector3(3, 2, 1));
 			curve.addControlpoint(new Vector3(1, 3, 3));
 			curve.addControlpoint(new Vector3(1, 0, 0));
-			// bc.addControlpoint(new Vector3(2, 2, 2));
+			
 			CurveNode n = new CurveNode(curve);
 			root.addChild(n);
 
-			// root.addChild(new HalfEdgeTriangleMeshNode(w.mesh));
 			for (Vector3 c : curve.getControllPoints())
 			{
 				TranslationNode tn = new TranslationNode(c);
@@ -61,51 +60,39 @@ public class CGFrame_A5 extends AbstractCGFrame
 				root.addChild(tn);
 			}
 
-//			BezierCurve bct = new BezierCurve();
-//			bct.addControlpoint(curve.calculate(tangenteValue));
-//			bct.addControlpoint(curve.calculate(tangenteValue).add(curve.getTangente(tangenteValue)));
-//			tangente = new CurveNode(bct);
-//			root.addChild(tangente);
 		}
 		else
 		{
 			List<Vector3> points = new ArrayList<Vector3>();
-			points.add(new Vector3(0, 0, 1));
-			points.add(new Vector3(1, 2, 1));
+//			points.add(new Vector3(0, 0, 1));
+//			points.add(new Vector3(1, 2, 1));
+//			points.add(new Vector3(2, 0, 1));
+			
+
+			points.add(new Vector3(1, 1, 1));
+			points.add(new Vector3(1, 2, 2));
 			points.add(new Vector3(2, 0, 1));
 
-
+			List<Vector3> cpoints = MonomCurve.interpolate(points);
 			curve = new MonomCurve();
-			curve.addControlpoint(points.get(0));
-			curve.addControlpoint(points.get(1));
-			curve.addControlpoint(points.get(2));
-			//List<Vector3> cpoints = MonomCurve.interpolate(points);
-//			curve = new MonomCurve();
-//			curve.addControlpoint(cpoints.get(0));
-//			curve.addControlpoint(cpoints.get(1));
-//			curve.addControlpoint(cpoints.get(2));
+			curve.addControlpoint(cpoints.get(0));
+			curve.addControlpoint(cpoints.get(1));
+			curve.addControlpoint(cpoints.get(2));
 			CurveNode n1 = new CurveNode(curve);
-
-//			BezierCurve bct = new BezierCurve();
-//			bct.addControlpoint(curve.calculate(tangenteValue));
-//			bct.addControlpoint(curve.calculate(tangenteValue).add(curve.getTangente(tangenteValue)));
-//			tangente = new CurveNode(bct);
-//			root.addChild(tangente);
 
 			for (Vector3 c : curve.getControllPoints())
 			{
-				//System.out.println(c.get(0) + " - " + c.get(1) + " - " + c.get(2));
 				TranslationNode tn = new TranslationNode(c);
 				tn.addChild(new SphereNode(.1, 15));
 				root.addChild(tn);
 			}
 
-//			for (Vector3 c : points)
-//			{
-//				TranslationNode tn = new TranslationNode(c);
-//				tn.addChild(new SphereNode(.05, 15));
-//				root.addChild(tn);
-//			}
+			for (Vector3 c : points)
+			{
+				TranslationNode tn = new TranslationNode(c);
+				tn.addChild(new SphereNode(.05, 15));
+				root.addChild(tn);
+			}
 			root.addChild(n1);
 
 		}
@@ -130,7 +117,6 @@ public class CGFrame_A5 extends AbstractCGFrame
 
 	public void keyPressed(int keyCode)
 	{
-		// System.out.println("Key pressed: " + keyCode);
 		if ((char) keyCode == 'J' && tangenteValue > 0)
 		{
 			System.out.println("j");

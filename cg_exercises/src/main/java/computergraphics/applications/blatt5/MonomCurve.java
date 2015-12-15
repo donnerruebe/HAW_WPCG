@@ -14,8 +14,9 @@ public class MonomCurve extends Curve
 		Vector3 sum = cList.get(0);
 		for (int i = 1; i < cList.size(); i ++)
 		{
-			sum = sum.add(cList.get(i).multiply(Math.pow(t, i)));
+			sum = sum.add(cList.get(i).multiply(Math.pow(t ,i)));
 		}
+		
 		return sum;
 	}
 	
@@ -26,9 +27,12 @@ public class MonomCurve extends Curve
 		{
 			return null;
 		}
-		controllpoints.add(points.get(0));
+
+		Vector3 c0 = points.get(0);
 		Vector3 c1 = points.get(1).multiply(4).subtract(points.get(0).multiply(3)).subtract(points.get(2));
-		Vector3 c2 = points.get(2).subtract(points.get(1)).subtract(c1);
+		Vector3 c2 = points.get(2).subtract(points.get(0)).subtract(c1);
+		
+		controllpoints.add(c0);
 		controllpoints.add(c1);
 		controllpoints.add(c2);
 		return controllpoints;
