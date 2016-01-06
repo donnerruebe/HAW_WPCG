@@ -11,12 +11,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import computergraphics.applications.blatt1.TranslationNode;
-import computergraphics.applications.blatt2.HalfEdgeTriangleMeshNode;
-import computergraphics.applications.blatt2.ImplicitWirr;
-import computergraphics.applications.blatt2.ImplicitTorus;
 import computergraphics.framework.AbstractCGFrame;
 import computergraphics.math.Vector3;
-import computergraphics.scenegraph.CuboidNode;
 import computergraphics.scenegraph.ShaderNode;
 import computergraphics.scenegraph.ShaderNode.ShaderType;
 import computergraphics.scenegraph.SphereNode;
@@ -64,11 +60,13 @@ public class CGFrame_A5 extends AbstractCGFrame
 		else
 		{
 			List<Vector3> points = new ArrayList<Vector3>();
+			// Punkte Test 1
 //			points.add(new Vector3(0, 0, 1));
 //			points.add(new Vector3(1, 2, 1));
 //			points.add(new Vector3(2, 0, 1));
 			
 
+			// Punkte Test 2
 			points.add(new Vector3(1, 1, 1));
 			points.add(new Vector3(1, 2, 2));
 			points.add(new Vector3(2, 0, 1));
@@ -109,8 +107,9 @@ public class CGFrame_A5 extends AbstractCGFrame
 		}
 
 		BezierCurve bct = new BezierCurve();
-		bct.addControlpoint(curve.calculate(tangenteValue));
-		bct.addControlpoint(curve.calculate(tangenteValue).add(curve.getTangente(tangenteValue)));
+		Vector3 currentPoint = curve.calculate(tangenteValue);
+		bct.addControlpoint(currentPoint);
+		bct.addControlpoint(currentPoint.add(curve.getTangente(tangenteValue).getNormalized().multiply(2)));
 		tangente = new CurveNode(bct);
 		root.addChild(tangente);
 	}

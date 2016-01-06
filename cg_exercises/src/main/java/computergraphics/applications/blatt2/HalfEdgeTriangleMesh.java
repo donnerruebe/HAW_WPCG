@@ -47,10 +47,10 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh
 		Vertex v3 = vertices.get(vertexIndex3);
 
 		// HalfEdge 1 erzeugen und mit Vertext 1 verknüpfen
-		HalfEdge he12 = new HalfEdge();
-		he12.setFacet(facet);
-		he12.setStartVertex(v1);
-		v1.setHalfEgde(he12);
+//		HalfEdge he12 = new HalfEdge();
+//		he12.setFacet(facet);
+//		he12.setStartVertex(v1);
+//		v1.setHalfEgde(he12);
 		
 		HalfEdge he1 = new HalfEdge();
 		he1.setFacet(facet);
@@ -188,19 +188,145 @@ public class HalfEdgeTriangleMesh implements ITriangleMesh
 	
 	public void computeVertexNormals()
 	{
-		for (Vertex v:vertices)
+		for (Vertex v: vertices)
 		{
-			HalfEdge firstEdge = v.getHalfEdge();
-			Vector3 normal= firstEdge.getFacet().getNormal();
+			// Start-Facette anhand der ersten Halbkante
+			HalfEdge start_edge = v.getHalfEdge();
 			
-			HalfEdge currentEdge = firstEdge.getOpposite().getNext();
+			// Normale der ersten Facette
+			Vector3 normal = start_edge.getFacet().getNormal();
 			
-			while(currentEdge.getOpposite().getNext() != firstEdge){
-				
-				normal.add(currentEdge.getFacet().getNormal());
-				currentEdge = currentEdge.getOpposite().getNext();
+			HalfEdge current_edge = start_edge.getOpposite().getNext();
+			
+			// Durchlaufe alle anliegenden Facetten ueber die Halbkanten
+			while (current_edge.getOpposite().getNext() != start_edge)
+			{
+				// Normale aufaddieren
+				normal.add(current_edge.getFacet().getNormal());
+				// Gehe zur naechsten Facette (ueber deren Halbkante)
+				current_edge = current_edge.getOpposite().getNext();
 			}
 			v.setNormal(normal.getNormalized());
+		}
+		
+	}
+	
+	public void laplace()
+	{
+		double alpha = 0.5;
+		List<Vector3> schwerpunkte = new ArrayList<Vector3>();
+		for (int i = 0; i < vertices.size(); i ++)
+		{
+			Vertex v = vertices.get(i);
+			// Start-Facette anhand der ersten Halbkante
+			HalfEdge start_edge = v.getHalfEdge().getOpposite();
+			
+			int anzahl = 1;
+			// Summe aller Positionen der anliegenden Vertizes
+			Vector3 sum = start_edge.getStartVertex().getPosition();
+			
+			HalfEdge current_edge = start_edge.getNext().getOpposite();
+			
+			// Durchlaufe alle anliegenden Facetten ueber die Halbkanten
+			while (current_edge != start_edge)
+			{
+				// Positionen aufaddieren
+				sum = sum.add(current_edge.getStartVertex().getPosition());
+				// Gehe zur naechsten Facette (ueber deren Halbkante)
+				current_edge = current_edge.getNext().getOpposite();
+				anzahl ++;
+			}
+			// Zwischenspeichern der berechnteten Schwerpunkte
+			schwerpunkte.add(sum.multiply(1./anzahl));
+		}
+		
+		for (int i = 0; i < vertices.size(); i ++)
+		{
+			
+			// Erzeuge neuen Vertext
+			Vertex x = new Vertex(schwerpunkte.get(i).multiply(1.-alpha).add(vertices.get(i).getPosition().multiply(alpha)));
+			x.setHalfEgde(vertices.get(i).getHalfEdge());
+			
+			
+			// Start-Facette anhand der ersten Halbkante
+			HalfEdge start_edge = x.getHalfEdge();
+			start_edge.setStartVertex(x);
+		
+			HalfEdge current_edge = start_edge.getOpposite().getNext();
+			
+			// Durchlaufe alle anliegenden Facetten ueber die Halbkanten
+			while (current_edge != start_edge)
+			{
+				// Positionen aufaddieren
+				current_edge.setStartVertex(x);
+				// Gehe zur naechsten Facette (ueber deren Halbkante)
+				current_edge = current_edge.getOpposite().getNext();
+				
+			}
+						
+			vertices.set(i, x);
+		}
+		computeTriangleNormals();
+		computeVertexNormals();
+		
+	}
+	
+	public void calculateVertexKruemmungColor()
+	{
+
+		computeTriangleNormals();
+		computeVertexNormals();
+		
+		double k_min = Double.MAX_VALUE;
+		double k_max = Double.MIN_VALUE;
+		List<Double> k_values = new ArrayList<Double>();
+		
+		for (Vertex v: vertices)
+		{
+			HalfEdge start_edge = v.getHalfEdge().getOpposite();
+			
+			int anzahl = 0;
+			double sum = 0;
+			double sum_a = 0;
+			
+			
+			HalfEdge current_edge = start_edge.getNext().getOpposite();
+			
+			// Durchlaufe alle anliegenden Facetten ueber die Halbkanten
+			while (current_edge != start_edge)
+			{
+				// Positionen aufaddieren
+				//sum += Math.acos((v.getPosition().multiply(current_edge.getStartVertex().getPosition())) / (v.getPosition().getNorm() * current_edge.getStartVertex().getPosition().getNorm())); 
+				//sum += Math.acos((v.getPosition().multiply(current_edge.getStartVertex().getPosition())) / (v.getPosition().getNorm() * current_edge.getStartVertex().getPosition().getNorm()));
+				sum += Math.acos((v.getNormal().multiply(current_edge.getFacet().getNormal()))); /// (v.getNormal().getNorm() * current_edge.getStartVertex().getPosition().getNorm()));
+				sum_a += current_edge.getFacet().getArea();
+				// Gehe zur naechsten Facette (ueber deren Halbkante)
+				current_edge = current_edge.getNext().getOpposite();
+				anzahl ++;
+			}
+			
+			double gamma = sum / anzahl;
+			double k = gamma / 1;//sum_a;
+			
+			k_values.add(k);
+			if (k < k_min)
+			{
+				k_min = k;
+			}
+			if (k > k_max)
+			{
+				k_max = k;
+			}
+			
+		}
+		System.out.println(k_min + "::" + k_max);
+		Vector3 gruen = new Vector3(0, 1, 0);
+		//Vector3 gelb = new Vector3(1, 1, 0);
+		
+		for (int i = 0; i < vertices.size(); i ++)
+		{
+			//vertices.get(i).setColor(gelb.subtract(gruen.multiply(((k_values.get(i)-k_min)/(k_max-k_min)))));
+			vertices.get(i).setColor(gruen.multiply(((k_values.get(i)-k_min)/(k_max-k_min))));
 		}
 		
 	}

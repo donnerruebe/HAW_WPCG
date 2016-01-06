@@ -24,7 +24,7 @@ public class Renderer3D {
    * Constants used to address OpenGL.
    */
   private static final double NEAR_CLIPPING_PLANE_DEFAULT = 0.1;
-  private static final double FAR_CLIPPING_PLANE_DEFAULT = 10.0;
+  private static final double FAR_CLIPPING_PLANE_DEFAULT = 100.0;
   private static final int SCREEN_WIDTH = 640;
   private static final int SCREEN_HEIGHT = 480;
   private static final float OPAQUE = 1.0f;

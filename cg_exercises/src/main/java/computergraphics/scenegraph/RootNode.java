@@ -22,12 +22,8 @@ public class RootNode extends GroupNode {
    */
   public RootNode() {
     Vector3 position = new Vector3(5, 5, 5);
-    Vector3 color = new Vector3(.1, .1, .1);
+    Vector3 color = new Vector3(1, 1, 1);
     lights.add(new LightSource(position, color));
-  }
-  
-  public void addLight(Vector3 pos, Vector3 col){
-	    lights.add(new LightSource(pos, col)); 
   }
 
   public int getNumberOfLightSources() {

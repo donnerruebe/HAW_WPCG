@@ -10,7 +10,7 @@ public class HalfEdgeTriangleMeshNode extends Node
 {
 	private static int MESH_LIST = 1;
 	HalfEdgeTriangleMesh mesh;
-	boolean displayListCreated = false;
+	public boolean displayListCreated = false;
 	
 
 	public HalfEdgeTriangleMeshNode(HalfEdgeTriangleMesh mesh)
@@ -23,12 +23,14 @@ public class HalfEdgeTriangleMeshNode extends Node
 	 */
 	private void initDisplayList(GL2 gl)
 	{
-		System.out.println("Creating Display List");
+		//System.out.println("Creating Display List");
 		
 		MESH_LIST = gl.glGenLists(1);
-		System.out.println(MESH_LIST);
+		//System.out.println(MESH_LIST);
 		gl.glNewList( MESH_LIST, GL2.GL_COMPILE );
 		gl.glBegin(GL2.GL_TRIANGLES);
+		//mesh.computeVertexNormals();
+		mesh.computeTriangleNormals();
 		for (int i = 0; i < mesh.getNumberOfTriangles(); i ++)
 		{
 			TriangleFacet f = mesh.getFacet(i);
@@ -38,19 +40,19 @@ public class HalfEdgeTriangleMeshNode extends Node
 			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glNormal3d(f.getNormal().get(0), f.getNormal().get(1), f.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
-			
+			gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
 			
 			he = he.getNext();
 			v = he.getStartVertex();
 			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
-			
+			gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
 
 			he = he.getNext();
 			v = he.getStartVertex();
 			//gl.glNormal3d(v.getNormal().get(0), v.getNormal().get(1), v.getNormal().get(2));
 			gl.glVertex3d(v.getPosition().get(0), v.getPosition().get(1), v.getPosition().get(2));
-			
+			gl.glColor3d(v.getColor().get(0), v.getColor().get(1), v.getColor().get(2));
 		}
 		gl.glEnd();
 		gl.glEndList();
@@ -63,7 +65,7 @@ public class HalfEdgeTriangleMeshNode extends Node
 		if (!displayListCreated)
 		{
 			initDisplayList(gl);
-			System.out.println("Display List inited");
+			//System.out.println("Display List inited");
 		}
 
 		gl.glCallList(MESH_LIST);

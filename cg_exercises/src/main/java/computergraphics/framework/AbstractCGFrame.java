@@ -61,7 +61,7 @@ public abstract class AbstractCGFrame extends JFrame {
     // Setup JFrame
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setTitle("WP Computergrafik");
-    setSize(800, 600);
+    setSize(640, 480);
     setVisible(true);
   }
 

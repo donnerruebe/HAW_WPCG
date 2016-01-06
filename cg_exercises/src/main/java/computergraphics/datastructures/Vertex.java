@@ -14,6 +14,8 @@ import computergraphics.math.Vector3;
  * @author Philipp Jenke
  */
 public class Vertex {
+	private static int id_gen = 0;
+	private int id;
 
   /**
    * 3D position of the vertex.
@@ -43,6 +45,8 @@ public class Vertex {
    */
   public Vertex(Vector3 position) {
     this.position.copy(position);
+    id = id_gen;
+    id_gen ++;
   }
 
   /**
@@ -56,6 +60,8 @@ public class Vertex {
   public Vertex(Vector3 position, Vector3 normal) {
     this.position.copy(position);
     this.normal.copy(normal);
+    id = id_gen;
+    id_gen ++;
   }
 
   /**
@@ -70,6 +76,8 @@ public class Vertex {
     this.position.copy(position);
     this.normal.copy(normal);
     this.color.copy(color);
+    id = id_gen;
+    id_gen ++;
   }
 
   public Vector3 getPosition() {
@@ -102,6 +110,6 @@ public class Vertex {
 
   @Override
   public String toString() {
-    return "Vertex";
+    return "Vertex " + id + " Position: " + getPosition() + " Normal: " + getNormal();
   }
 }

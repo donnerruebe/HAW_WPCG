@@ -17,19 +17,20 @@ public class CurveNode extends Node
 	@Override
 	public void drawGl(GL2 gl)
 	{
-		// TODO Auto-generated method stub
 		gl.glBegin(GL2.GL_LINES);
 		Vector3 v = c.calculate(0);
-		Vector3 v1 = c.calculate(0);
+		// Startpunkt
 		gl.glVertex3d(v.get(0),v.get(1),v.get(2));
-		for (double i = 0.05; i <= 1; i += 0.05)
+		for (double i = 0.05; i < 1; i += 0.05)
 		{
 			v = c.calculate(i);
+			// Ende des angefangenen Stuecks
 			gl.glVertex3d(v.get(0),v.get(1),v.get(2));
-			
+			// Anfang des naechsten Stuecks
 			gl.glVertex3d(v.get(0),v.get(1),v.get(2));
 		}
 		v = c.calculate(1);
+		// Ende des letzten Stuecks
 		gl.glVertex3d(v.get(0),v.get(1),v.get(2));
 		gl.glEnd();
 	}

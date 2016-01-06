@@ -23,25 +23,26 @@ public class BezierCurve extends Curve
 	}
 
 	
-	private double B_Abl(int n, int i, double t)
-	{
-		if (i == 0 || n == i)
-		{
-			return 0;
-		}
-		return n * (B(n-1,i-1,t) - B(n-1,i,t));
-	}
+//	private double B_Abl(int n, int i, double t)
+//	{
+//		if (i == 0 || n == i)
+//		{
+//			return 0;
+//		}
+//		return n * (B(n-1,i-1,t) - B(n-1,i,t));
+//	}
 
 	@Override
 	public Vector3 getTangente(double t)
 	{
-		int n = getGrad();
+		/*int n = getGrad();
 		Vector3 sum = new Vector3(0, 0, 0);
 		for (int i = 0; i < n; i ++)
 		{
-			sum = sum.add(cList.get(i).multiply(B_Abl(n-1,i,t)));
+			sum = sum.add(cList.get(i).multiply(B_Abl(n,i,t)));
 		}
-		return sum;
+		return sum;*/
+		return calculate(t).subtract(calculate(t-0.00001));
 	}
 
 }
