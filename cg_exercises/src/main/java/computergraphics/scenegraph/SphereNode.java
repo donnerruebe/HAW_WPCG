@@ -10,6 +10,7 @@ import com.jogamp.opengl.GL2;
 import com.jogamp.opengl.glu.GLU;
 import com.jogamp.opengl.glu.GLUquadric;
 
+import computergraphics.applications.blatt1.TranslationNode;
 import computergraphics.datastructures.IntersectionResult;
 import computergraphics.datastructures.Ray3D;
 import computergraphics.math.Vector3;
@@ -43,6 +44,14 @@ public class SphereNode extends Node {
 	public SphereNode(double radius, Vector3 center) {
 		this.radius = radius;
 		this.center = center;
+	}
+	
+
+	public TranslationNode getTranslated()
+	{
+		TranslationNode tn = new TranslationNode(center);
+		tn.addChild(this);
+		return tn;
 	}
 	
 	@Override
